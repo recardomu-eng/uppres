@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Gift App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            background: #1c1c1c; color: white;
+            font-family: sans-serif; text-align: center;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh;
+        }
+        .gift-card {
+            background: #2b2b2b; padding: 20px; border-radius: 15px;
+            border: 2px solid #f39c12; width: 200px;
+        }
+        button {
+            background: #f39c12; border: none; padding: 10px 20px;
+            color: white; border-radius: 10px; margin-top: 15px; cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="gift-card">
+        <h1>🎁</h1>
+        <p>Твой первый подарок!</p>
+        <button onclick="tgClose()">Закрыть</button>
+    </div>
+
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand(); // Разворачивает приложение на весь экран
+
+        function tgClose() {
+            tg.close();
+        }
+    </script>
+</body>
+</html>
