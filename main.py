@@ -26,9 +26,19 @@ async def start(message: types.Message):
         f"Привет, {message.from_user.first_name}! \nНажми на кнопку ниже, чтобы посмотреть свои подарки:",
         reply_markup=markup
     )
-
+@dp.message(F.content_type == "web_app_data")
+async def process_win(message: types.Message):
+    import json
+    data = json.loads(message.web_app_data.data)
+    
+    if data['action'] == "win":
+        await message.answer(
+            f"💰 **Поздравляем!**\n"
+            f"Вы успешно вывели {data['amount']} TON на коэффициенте {data['multiplier']}x!"
+        )
 async def main():
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
+
     asyncio.run(main())
