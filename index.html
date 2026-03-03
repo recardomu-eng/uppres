@@ -1,107 +1,92 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gift App Loader</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>GiftUp Loading</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
-            margin: 0; padding: 0;
-            background: #1c1c1c; color: white;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden;
+            background-color: #000; color: white; margin: 0; padding: 0;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            height: 100vh; font-family: sans-serif; overflow: hidden;
         }
 
-        /* Экран загрузки */
-        #loader {
-            position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: #121212;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            z-index: 9999; transition: opacity 0.5s ease;
+        /* Анимация ракеты */
+        .rocket-container {
+            font-size: 60px;
+            animation: fly 0.6s infinite ease-in-out;
         }
 
-        .rocket {
-            font-size: 80px;
-            margin-bottom: 20px;
-            animation: shake 0.5s infinite;
+        @keyframes fly {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
         }
 
-        /* Анимация тряски ракеты */
-        @keyframes shake {
-            0% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0); }
+        /* Текст процентов */
+        .loading-text {
+            margin-top: 20px; font-size: 24px; font-weight: bold;
+            letter-spacing: 1px;
         }
 
+        /* Полоска загрузки */
         .progress-container {
-            width: 70%; height: 8px;
-            background: #333; border-radius: 10px;
-            overflow: hidden; margin-top: 20px;
+            width: 200px; height: 6px; background: #333;
+            border-radius: 10px; margin-top: 15px; overflow: hidden;
         }
 
         .progress-bar {
             width: 0%; height: 100%;
-            background: linear-gradient(90deg, #f39c12, #e67e22);
-            transition: width 0.1s;
+            background: linear-gradient(90deg, #ff9500, #ffcc00);
+            transition: width 0.2s;
         }
 
-        .percent {
-            font-size: 24px; font-weight: bold; margin-top: 10px;
-        }
-
-        /* Контент самого приложения (скрыт изначально) */
-        #main-content {
-            display: none; padding: 20px; text-align: center;
-        }
+        /* Основной контент после загрузки (пока пустой) */
+        #content { display: none; text-align: center; }
     </style>
 </head>
 <body>
 
     <div id="loader">
-        <div class="rocket">🚀</div>
-        <div class="percent" id="percent-text">0%</div>
+        <div class="rocket-container">🚀</div>
+        <div class="loading-text" id="percent">0%</div>
         <div class="progress-container">
-            <div class="progress-bar" id="progress-bar"></div>
+            <div class="progress-bar" id="bar"></div>
         </div>
     </div>
 
-    <div id="main-content">
-        <h1>Приложение готово!</h1>
-        <p>Добро пожаловать в GiftUp Clone</p>
-        <button onclick="window.Telegram.WebApp.close()" style="background:#f39c12; border:none; color:white; padding:15px; border-radius:10px;">Закрыть</button>
+    <div id="content">
+        <h2 style="color: #ff9500;">ПРИЛОЖЕНИЕ ГОТОВО</h2>
+        <p>Здесь будут твои подарки</p>
     </div>
 
     <script>
         let tg = window.Telegram.WebApp;
-        tg.expand();
+        tg.expand(); // Развернуть на всё окно
 
-        let percentText = document.getElementById('percent-text');
-        let progressBar = document.getElementById('progress-bar');
+        let percentDisplay = document.getElementById('percent');
+        let barDisplay = document.getElementById('bar');
         let loader = document.getElementById('loader');
-        let mainContent = document.getElementById('main-content');
+        let content = document.getElementById('content');
 
-        let width = 0;
-        
-        // Функция симуляции загрузки
+        let progress = 0;
+
+        // Имитация загрузки
         let interval = setInterval(() => {
-            if (width >= 100) {
+            progress += Math.floor(Math.random() * 7) + 2; // Рандомная скорость
+            if (progress > 100) progress = 100;
+
+            percentDisplay.innerText = progress + '%';
+            barDisplay.style.width = progress + '%';
+
+            if (progress === 100) {
                 clearInterval(interval);
-                // Прячем ракету и показываем контент
-                loader.style.opacity = '0';
                 setTimeout(() => {
                     loader.style.display = 'none';
-                    mainContent.style.display = 'block';
+                    content.style.display = 'block';
                 }, 500);
-            } else {
-                width += Math.floor(Math.random() * 5) + 1; // Случайная скорость
-                if (width > 100) width = 100;
-                percentText.innerText = width + '%';
-                progressBar.style.width = width + '%';
             }
-        }, 100); // Скорость обновления
+        }, 150);
     </script>
 </body>
 </html>
